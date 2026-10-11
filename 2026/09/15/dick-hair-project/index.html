@@ -1,0 +1,301 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>吊毛项目日记 - 初始化与登录系统 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="记录每天新学了点啥吊毛玩意，不至于到最后毛都没剩。 9月15日也算作是重拾旧山河了，今天部署博客，并完成了前后端项目的初始化。  后端：SpringBoot居然都4.1.1了，更新的好快啊，跟不上时代了。之后依赖的选取可能需要注意版本对应。 前端：Vue3这个项目初始化也更新好现代化，选项互动更高级了，记录一下搭建过程。12345$ npm create vue@latest gensokyo-r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吊毛项目日记 - 初始化与登录系统">
+<meta property="og:url" content="http://example.com/2026/09/15/dick-hair-project/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="记录每天新学了点啥吊毛玩意，不至于到最后毛都没剩。 9月15日也算作是重拾旧山河了，今天部署博客，并完成了前后端项目的初始化。  后端：SpringBoot居然都4.1.1了，更新的好快啊，跟不上时代了。之后依赖的选取可能需要注意版本对应。 前端：Vue3这个项目初始化也更新好现代化，选项互动更高级了，记录一下搭建过程。12345$ npm create vue@latest gensokyo-r">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2026-09-15T09:54:15.317Z">
+<meta property="article:modified_time" content="2026-10-01T12:06:20.838Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "吊毛项目日记 - 初始化与登录系统",
+  "url": "http://example.com/2026/09/15/dick-hair-project/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2026-09-15T09:54:15.317Z",
+  "dateModified": "2026-10-01T12:06:20.838Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "John Doe",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/09/15/dick-hair-project/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '吊毛项目日记 - 初始化与登录系统',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">吊毛项目日记 - 初始化与登录系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">吊毛项目日记 - 初始化与登录系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-15T09:54:15.317Z" title="Created 2026-09-15 17:54:15">2026-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-10-01T12:06:20.838Z" title="Updated 2026-10-01 20:06:20">2026-10-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>记录每天新学了点啥吊毛玩意，不至于到最后毛都没剩。</p>
+<h2 id="9月15日"><a href="#9月15日" class="headerlink" title="9月15日"></a>9月15日</h2><p><strong>也算作是重拾旧山河了，今天部署博客，并完成了前后端项目的初始化</strong>。</p>
+<ul>
+<li>后端：SpringBoot居然都4.1.1了，更新的好快啊，跟不上时代了。之后依赖的选取可能需要注意版本对应。</li>
+<li>前端：Vue3这个项目初始化也更新好现代化，选项互动更高级了，记录一下搭建过程。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ npm create vue@latest gensokyo-radio-web</span><br><span class="line">$ <span class="built_in">cd</span> gensokyo-radio-web</span><br><span class="line">$ npm install</span><br><span class="line">$ npm add axios</span><br><span class="line">$ npm run dev</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>另，当前版本的vue初始化似乎对oxlint相关的内容有bug，处理办法是简单粗暴的全部删除^^;)。</p>
+<h2 id="9月16日"><a href="#9月16日" class="headerlink" title="9月16日"></a>9月16日</h2><p><strong>今天主要进行了用户登录&#x2F;注册的基本实现：</strong></p>
+<ul>
+<li>用户数据库表结构与实体类的初步建立。</li>
+<li>登录dto、注册dto和简要用户信息类的建立。</li>
+<li>ThreadLocal上下文和全局异常处理器。</li>
+<li>单层拦截器的实现与配置。</li>
+</ul>
+<h3 id="一、-JAVA操作数据库-MybatisPlus的引入"><a href="#一、-JAVA操作数据库-MybatisPlus的引入" class="headerlink" title="一、 JAVA操作数据库-MybatisPlus的引入"></a>一、 JAVA操作数据库-MybatisPlus的引入</h3><p>升级一下这次不用Mybatis了，已经不想再自己写Mapper了😡</p>
+<p>记录下引入的基本步骤：</p>
+<h4 id="1-引依赖，Springboot4得用新版依赖了"><a href="#1-引依赖，Springboot4得用新版依赖了" class="headerlink" title="1. 引依赖，Springboot4得用新版依赖了"></a>1. 引依赖，Springboot4得用新版依赖了</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-spring-boot4-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-application-yml-配置"><a href="#2-application-yml-配置" class="headerlink" title="2. application.yml 配置"></a>2. application.yml 配置</h4><p>数据库相关配置（老生常谈姑且还是写一下）</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/gensokyo_radio</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure>
+<p>MybatisPlus相关配置</p>
+<blockquote>
+<p>关于mapper-locations的配置，还没研究清楚，说是“扫描类路径（<code>resources</code> 目录）下，<code>mapper</code> 文件夹及其所有子文件夹中的 <code>.xml</code> 文件”，但不知道是不是真的。</p>
+</blockquote>
+<blockquote>
+<p>关于主键自增策略（id-type），默认主键策略是 <code>assign_id</code>（雪花 ID），需要使用 <code>auto</code> 策略，即数据库自增。也可以在实体类中用 <code>@TableId(type = IdType.AUTO)</code> 注解声明。</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">  <span class="attr">configuration:</span></span><br><span class="line">    <span class="comment"># 下划线自动转驼峰（数据库 user_name → 实体userName）</span></span><br><span class="line">    <span class="attr">map-underscore-to-camel-case:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># 开发环境打印 SQL，方便排查</span></span><br><span class="line">    <span class="attr">log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span></span><br><span class="line">  <span class="attr">global-config:</span></span><br><span class="line">    <span class="attr">db-config:</span></span><br><span class="line">      <span class="comment"># 主键自增策略</span></span><br><span class="line">      <span class="attr">id-type:</span> <span class="string">auto</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-启动类-MapperScan注解"><a href="#3-启动类-MapperScan注解" class="headerlink" title="3. 启动类@MapperScan注解"></a>3. 启动类@MapperScan注解</h4><p>这是为了扫描Mapper接口，自动生成实现类。当前本项目是<strong>按功能模块垂直分包</strong>，Mapper接口散在不同文件夹里，故需要注意扫描的范围。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MapperScan(&quot;com.gensoradio.demo.module.*.mapper&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-自动填充处理器的配置"><a href="#4-自动填充处理器的配置" class="headerlink" title="4. 自动填充处理器的配置"></a>4. 自动填充处理器的配置</h4><p>因为在实体类中使用了 <code>@TableField(fill = FieldFill.xxx)</code> 的自动填充注解，来规避写服务层时频繁的编写时间更新逻辑，故需要进行该项实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisMetaObjectHandler</span> <span class="keyword">implements</span> <span class="title class_">MetaObjectHandler</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就是编写三层架构做测试啦(～￣▽￣)～</p>
+<h4 id="5-三层架构编写时又有这些小问题"><a href="#5-三层架构编写时又有这些小问题" class="headerlink" title="5. 三层架构编写时又有这些小问题"></a>5. 三层架构编写时又有这些小问题</h4><ol>
+<li><p><code>@JsonIgnore</code> 的作用。在实体类中，把 Java 对象转成 JSON 字符串返回给前端时，自动忽略这个字段，不输出到响应里，用于密码字段的保护。</p>
+</li>
+<li><p><code>Lambda 查询构造器</code> 的使用。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LambdaQueryWrapper&lt;User&gt; wrapper = <span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;();</span><br><span class="line">wrapper.eq(User::getUsername, username);</span><br><span class="line">baseMapper.selectOne(wrapper);</span><br></pre></td></tr></table></figure>
+<p> 大概就是这样，避免了手搓where子句写错的问题，因为直接用getter了。</p>
+</li>
+</ol>
+<h3 id="二、-ThreadLocal上下文和全局异常处理器的初步实现"><a href="#二、-ThreadLocal上下文和全局异常处理器的初步实现" class="headerlink" title="二、 ThreadLocal上下文和全局异常处理器的初步实现"></a>二、 ThreadLocal上下文和全局异常处理器的初步实现</h3><p>这两个东西应当是在拦截器之前写好的，记录下实现过程。</p>
+<h4 id="1-ThreadLocal上下文的实现"><a href="#1-ThreadLocal上下文的实现" class="headerlink" title="1. ThreadLocal上下文的实现"></a>1. ThreadLocal上下文的实现</h4><p><code>ThreadLocal</code> 是<strong>JDK 原生工具，和 Spring 无关</strong>。</p>
+<p>这个东西<strong>不跨线程</strong>，每个线程都有自己的副本，互不干扰。需要注意的是<strong>内存泄漏</strong>问题，Tomcat 使用线程池，线程不会销毁，会放回池子复用，所以在拦截器检查完后需要进行清除。</p>
+<p>从实现角度来说，这个好像没啥要注意的，基本这种项目都是存个用户id^^;)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserContext</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Long&gt; USER_ID = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setUserId</span><span class="params">(Long id)</span> &#123; </span><br><span class="line">        USER_ID.set(id); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title function_">getUserId</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> USER_ID.get(); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span> &#123; </span><br><span class="line">        USER_ID.remove(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-全局异常处理器的极简实现"><a href="#2-全局异常处理器的极简实现" class="headerlink" title="2. 全局异常处理器的极简实现"></a>2. 全局异常处理器的极简实现</h4><p><code>@RestControllerAdvice</code> 是 Springboot 提供的注解。</p>
+<p>这个的极简实现也没啥特别要注意的，随着自定义异常的增多，这个处理器也会变复杂。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalExceptionHandler</span> &#123;</span><br><span class="line">    <span class="meta">@ExceptionHandler(Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;Void&gt; <span class="title function_">other</span><span class="params">(Exception e)</span> &#123;</span><br><span class="line">        log.error(<span class="string">&quot;程序出错: &quot;</span>, e);</span><br><span class="line">        <span class="keyword">return</span> Result.error(<span class="number">500</span>, <span class="string">&quot;程序出错怎么不找找自己问题😡&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ExceptionHandler(AuthException.class)</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;Void&gt; <span class="title function_">auth</span><span class="params">(AuthException e)</span> &#123;</span><br><span class="line">        log.error(<span class="string">&quot;登录异常: &quot;</span>, e);</span><br><span class="line">        <span class="keyword">return</span> Result.error(e.getCode(), e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、-单层token登录校验的实现"><a href="#三、-单层token登录校验的实现" class="headerlink" title="三、 单层token登录校验的实现"></a>三、 单层token登录校验的实现</h3><p>接下来是拦截器的编写，主要涉及三个类：<code>JwtUtil</code> 、 <code>JwtLoginInterceptor</code> 、  <code>WebMvcConfig</code>，其中对于 <code>JwtUtil</code> ，其实说不定可以拆个 <code>JwtProperties</code> 出来，用来配置 JWT 相关的参数，但因为是后面才想到的，也就没有太史慈了^^;)</p>
+<h4 id="1-依赖与配置"><a href="#1-依赖与配置" class="headerlink" title="1. 依赖与配置"></a>1. 依赖与配置</h4><p><code>jjwt</code> 0.11 及更早的旧版本，整个包都打在一起。0.12 之后官方拆成了三层。这也就是为什么黑马的talis智能学习辅助系统里只引了一个依赖，但这里要引三个。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 包含接口和抽象类 (Jwts、Claims) --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.12.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 接口的具体实现代码,运行期才需要 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt-impl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.12.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 让 JJWT 用 Jackson 来序列化 / 反序列化 JWT 的 payload 部分 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt-jackson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.12.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后是关于配置项，这个在老项目中是写死在 <code>JwtUtil</code> 类里的，现在为了看着高级(没事找事)一些，把它放到 <code>application.yml</code> 里。其实如果可能，请求头相关(像 <code>tokenName: Authorization</code> 、<code>tokenPrefix: Bearer</code> )啥的也可以放到这里头，所以说可以单独拆个properties类出来，但终究是错付了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jwt:</span></span><br><span class="line">  <span class="attr">secret:</span> <span class="number">123456</span></span><br><span class="line">  <span class="attr">expiration:</span> <span class="number">1145141919810</span></span><br></pre></td></tr></table></figure>
+<p>然后还有个小问题，是关于 <code>@Value(&quot;$&#123;jwt.secret&#125;&quot;)</code> 字段注解，和 <code>@ConfigurationProperties(prefix = &quot;jwt&quot;)</code> 注解的。需要注意的是后者需要依赖于setter使用，所以在这里使用前者。对于properties类这种一般会加上 <code>@Data</code> 注解的，后者会比较方便我感觉。</p>
+<h4 id="2-JwtUtil的实现与功能"><a href="#2-JwtUtil的实现与功能" class="headerlink" title="2. JwtUtil的实现与功能"></a>2. JwtUtil的实现与功能</h4><p>JWT 不是加密，是<strong>签名</strong>。payload 里的内容 base64 就能解码看到，所以不要往里面存密码等敏感信息，只存 userId 就够了。签名的作用是「保证内容没被改过」。</p>
+<p>这个实现没啥说的，就是个工具类，用来<strong>生成&#x2F;解析 JWT</strong>。而且新版本的jjwt在这部分的api有一定改动，说不定过段时间又会有改动，随查随写便是。然后由于没有properties类，手动给它加上几个getter会比较好。</p>
+<p>另外还有个比较有趣的点就是，对于这种工具类，往往会面临<strong>静态方法</strong>或<strong>注册为Bean</strong>的问题。这里尝试了跟老项目不同的方式，注册为Bean，然后在需要的地方注入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成 token：把 数据项 装进去，签上名，返回字符串</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">generateAccessToken</span><span class="params">(Map&lt;String, Object&gt; claims)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Jwts.builder()</span><br><span class="line">            .claims(claims)  <span class="comment">// 对应 addClaims</span></span><br><span class="line">            .issuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>())  <span class="comment">// 签发时间</span></span><br><span class="line">            .expiration(<span class="keyword">new</span> <span class="title class_">Date</span>(System.currentTimeMillis() + expiration)) <span class="comment">// 对应 setExpiration</span></span><br><span class="line">            .signWith(key())   <span class="comment">// 对应 signWith(算法,key)</span></span><br><span class="line">            .compact();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 解析 token：验签名 + 验过期, 解析时拿回整个 map</span></span><br><span class="line"><span class="keyword">public</span> Claims <span class="title function_">parseJwt</span><span class="params">(String token)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Jwts.parser()</span><br><span class="line">            .verifyWith(key())  <span class="comment">// 用密钥验签名，篡改过的token这里直接抛异常</span></span><br><span class="line">            .build()</span><br><span class="line">            .parseSignedClaims(token)   <span class="comment">// 解析三段结构</span></span><br><span class="line">            .getPayload();              <span class="comment">// 取 payload 部分</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-登录校验拦截器的实现"><a href="#3-登录校验拦截器的实现" class="headerlink" title="3. 登录校验拦截器的实现"></a>3. 登录校验拦截器的实现</h4><p>Spring MVC 的「拦截器链」在 DispatcherServlet 之后、Controller 之前执行。<br>它和 Filter 不是一个东西：Filter 是 Servlet 层面的，Interceptor 是 Spring MVC 层面的。</p>
+<p>在有全局异常处理器的情况下，直接把检查时的异常throw出去即可，不用在这catch处理了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JwtLoginInterceptor</span> <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，在拦截逻辑中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 从请求头里取 Authorization</span></span><br><span class="line"><span class="type">String</span> <span class="variable">auth</span> <span class="operator">=</span> req.getHeader(<span class="string">&quot;Authorization&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (auth == <span class="literal">null</span> || !auth.startsWith(<span class="string">&quot;Bearer &quot;</span>)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AuthException</span>(<span class="number">401</span>, <span class="string">&quot;未登录&quot;</span>);  <span class="comment">// 没带token，直接抛未登录</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个头和token前缀是前后端的约定，可以用这个规范的写法 <code>Authorization: Bearer &lt;token&gt;</code> 来传递token。要是不想，也可以用自己的，就像黑马那个直接用 <code>token: &lt;token&gt;</code> 来传递token。但这里为了(显得)专业一点，就用前者了。</p>
+<h4 id="4-WebMvcConfig配置类的实现"><a href="#4-WebMvcConfig配置类的实现" class="headerlink" title="4. WebMvcConfig配置类的实现"></a>4. WebMvcConfig配置类的实现</h4><p>把拦截器注册到 Spring 里，并规定哪些路径要拦、哪些放行，同时配置跨域(这个还没搞懂到底是啥，之后碰到再说吧)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebMvcConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addInterceptors</span><span class="params">(InterceptorRegistry reg)</span> &#123;</span><br><span class="line">        reg.addInterceptor(jwtLoginInterceptor)   <span class="comment">// 注册拦截器</span></span><br><span class="line">           .addPathPatterns(<span class="string">&quot;/api/**&quot;</span>)           <span class="comment">// 拦截所有接口</span></span><br><span class="line">           .excludePathPatterns(</span><br><span class="line">                ...</span><br><span class="line">           );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-三层架构编码验证时的问题"><a href="#5-三层架构编码验证时的问题" class="headerlink" title="5. 三层架构编码验证时的问题"></a>5. 三层架构编码验证时的问题</h4><ol>
+<li><p><code>RegisterRequest</code> 、 <code>LoginRequest</code> 、 <code>LoginResponse</code> DTO的实现。均使用record关键字。record 是 Java 16 引入的不可变数据载体类型，声明后自动包含<strong>全参构造器</strong>，**字段访问器如username()<strong>，</strong>equals()、hashCode()、toString()**。DTO 是 “请求进来→用完→丢” 的数据，一旦创建就不该被改。record 的字段是 <code>private final</code>，天然不可变，杜绝了 “请求中途被改了” 这类 bug。</p>
+</li>
+<li><p>校验注解 + @Valid：到底是什么、怎么工作？这几个DTO当中使用了许多校验注解，比如 <code>@NotBlank</code> 、<code>@Email</code> 、<code>@Size</code> 等。Controller层也使用了 <code>@Valid</code> 注解。它们是<strong>Jakarta Validation 标准</strong>规定的，并不属于JDK，也不属于Spring，只是它很常用，Spring中对其进行了集成。故使用时需要引入依赖：</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- validation 校验 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BCrypt的使用。这东西是用来把密码加密为哈希字符串的。</p>
+<p> 首先引个依赖：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.security&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-security-crypto&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p> 然后写个配置Bean：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BCryptConfig</span> &#123; </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> BCryptPasswordEncoder <span class="title function_">passwordEncoder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">BCryptPasswordEncoder</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 最后有两个核心方法：</p>
+<p> <code>passwordEncoder.encode(原始密码)</code> ：对明文密码做单向哈希，返回 <code>$2a$10$...</code> 格式的密文。<strong>注册</strong>时，存入数据库前使用。</p>
+<p> <code>passwordEncoder.matches(原始密码, 数据库密文)</code> ：将明文密码和库中密文做比对，返回 boolean。<strong>登录</strong>时，校验密码是否正确使用</p>
+</li>
+</ol>
+<h3 id="四、-小结"><a href="#四、-小结" class="headerlink" title="四、 小结"></a>四、 小结</h3><p>今天实现了<strong>两个</strong>接口：</p>
+<p><code>(POST) - /api/auth/register</code></p>
+<p><code>(POST) - /api/auth/login</code></p>
+<p>今天就这些了，好累。明天要去上编译原理了，再不去他要给我挂了。可恶，这老登，最后一届学生了还不给放点水😡</p>
+<p>祈禱明天對你來說，也是美好的一天ヾ(≧▽≦*)o。</p>
+<h2 id="9月17日"><a href="#9月17日" class="headerlink" title="9月17日"></a>9月17日</h2><p><strong>今天主要进行了双token拦截机制的基本实现：</strong></p>
+<ul>
+<li>实现refresh、logout接口。</li>
+<li>修改了两个token分别的加密对象，同步修改jwtutil和拦截器。</li>
+<li>修改了LoginResponse响应结果，新增refreshtoken过期时间。</li>
+</ul>
+<p>这算是个新知识了，顺道把redis也用起来了，记录一下实现过程和问题。<br>然后关于双token拦截机制是什么，为什么需要它，可以看这篇博客：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dick-hair/p/17322222.html">双token拦截机制</a>。</p>
+<h3 id="一、-Redis的引入及其相关配置"><a href="#一、-Redis的引入及其相关配置" class="headerlink" title="一、 Redis的引入及其相关配置"></a>一、 Redis的引入及其相关配置</h3><p>也是黑马点评的老伙计了，记录下新版引入的基本步骤：</p>
+<h4 id="1-引依赖"><a href="#1-引依赖" class="headerlink" title="1. 引依赖"></a>1. 引依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>新版依赖有些方法还废弃了，像熟悉的set，expire等，但我是念旧的人所以还是用老的😋</p>
+<h4 id="2-application-yml-配置-1"><a href="#2-application-yml-配置-1" class="headerlink" title="2. application.yml 配置"></a>2. application.yml 配置</h4><p>数据库相关配置（老生常谈姑且还是写一下）</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">data:</span></span><br><span class="line">    <span class="attr">redis:</span></span><br><span class="line">      <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">      <span class="attr">database:</span> <span class="number">9</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span> </span><br></pre></td></tr></table></figure>
+<p>新依赖包结构也有变化，加了一层data，下面才是redis配置。至于为什么用⑨号桶，你知道的我一直是琪露诺的粉丝😈。</p>
+<h3 id="二、-双token拦截机制的实现"><a href="#二、-双token拦截机制的实现" class="headerlink" title="二、 双token拦截机制的实现"></a>二、 双token拦截机制的实现</h3><p>简单说下我对这个机制的理解：</p>
+<blockquote>
+<p>双token拦截机制是一种权衡安全与用户体验的登录机制，它在用户登录后，生成两个token： <code>access token</code> 和 <code>refresh token</code>。<br><code>access token</code> 用于每次请求，它泄露了就可能有人来乱搞，但是单token模式下其无法主动失效，只能等待过期（一般都是两周吧差不多）。<br>于是引入 <code>refresh token</code> 用于刷新 <code>access token</code>，这样可以缩短后者的过期时间，而让前者保持较长的过期时间，减少了别人用后者乱搞的风险。</p>
+</blockquote>
+<h4 id="1-JwtUtil，拦截器，WebMvcConfig的改动"><a href="#1-JwtUtil，拦截器，WebMvcConfig的改动" class="headerlink" title="1. JwtUtil，拦截器，WebMvcConfig的改动"></a>1. JwtUtil，拦截器，WebMvcConfig的改动</h4><p><strong>对于JwtUtil</strong>，新增了生成refresh token的方法，同时新增字段 <code>refreshExpiration</code> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">generateRefreshToken</span><span class="params">(Map&lt;String,Object&gt; claims)</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>对于拦截器</strong>，编写了第二层拦截器，只拦截 <code>/refresh</code> 请求。有两个我认为需要注意或有待改进的点：</p>
+<p>其一，与第一层access拦截器的核心差异在于其需要去redis进行校验。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 差异：去Redis校验refresh token是否存在（未被吊销）</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> Constant.REFRESH_TOKEN_KEY_PREFIX + userId;</span><br><span class="line"><span class="type">String</span> <span class="variable">storedToken</span> <span class="operator">=</span> redisTemplate.opsForValue().get(key);</span><br><span class="line"><span class="keyword">if</span> (!refreshToken.equals(storedToken)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AuthException</span>(<span class="number">401</span>, <span class="string">&quot;令牌出错，请重新登录&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其二，我直接把refresh token存储在请求头中，且请求头是硬编码的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 约定：refresh token放在请求头 G-Refresh-Token 里</span></span><br><span class="line"><span class="type">String</span> <span class="variable">refreshToken</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;G-Refresh-Token&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>对于后者倒好说，只是不够优雅的问题。但对于前者，我了解到有一种方式不需要前端在手动在 header 塞 <code>G‑Refresh‑Token</code> ：将 <code>refresh token</code> 储存在 HttpOnly Cookie 中，并用自动 Cookie 发送。但这种方式虽然是生产上的最佳实践（豆姐说的😓），但实现起来很复杂的亚子，我也不太懂，这里现留下。</p>
+<p><strong>对于WebMvcConfig</strong>，注册两层拦截器。注意access层排除 <code>/refresh</code> 请求，refresh层仅拦截 <code>/refresh</code> 请求。还要注意注册的先后顺序。</p>
+<h4 id="2-三层架构方法的改动"><a href="#2-三层架构方法的改动" class="headerlink" title="2. 三层架构方法的改动"></a>2. 三层架构方法的改动</h4><p><strong>登录方法login的改动</strong>：新增了生成双token，和把refresh token存储到redis中的逻辑。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3.2 生成access token</span></span><br><span class="line"><span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> jwtUtil.generateAccessToken(user.getId());</span><br><span class="line"><span class="comment">// 3.3 生成refresh token 并存入redis 设置过期时间</span></span><br><span class="line"><span class="type">String</span> <span class="variable">refreshToken</span> <span class="operator">=</span> jwtUtil.generateRefreshToken(claims);</span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> Constant.REFRESH_TOKEN_KEY_PREFIX + user.getId();</span><br><span class="line">redisTemplate.opsForValue().set(key, refreshToken, </span><br><span class="line">    jwtUtil.getRefreshExpirationSeconds(), TimeUnit.SECONDS);</span><br></pre></td></tr></table></figure>
+<p><strong>刷新方法refresh的编写</strong>：主要完成新access token的生成。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> LoginResponse <span class="title function_">refresh</span><span class="params">()</span> &#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>需要考虑的有两点：</p>
+<p>其一，关于refresh token过期时间的刷新。这个我还拿不定主意是否要保留。保留，好处是不会出现用户还在使用应用，就突然要重新登陆的情况；但坏处就在于它要访问redis了，丧失了无状态性能优势。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.5 滑动过期 —— 每次刷新都重置refresh token的Redis过期时间</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> Constant.REFRESH_TOKEN_KEY_PREFIX + userId;</span><br><span class="line">redisTemplate.expire(key, jwtUtil.getRefreshExpirationSeconds(), TimeUnit.SECONDS);</span><br></pre></td></tr></table></figure>
+<p>其二，关于jwt加密对象的选取和最终user是否需要返回。为了避免在refresh方法中增加<strong>访问数据库</strong>的逻辑，我决定access token只加密userId，而refresh token保留一开始的claims加密。并且返回相应vo时，用户信息留null。</p>
+<blockquote>
+<p>对于此修改，要记得同步去进行拦截器的修改，不然取不到正确的东西（jwt中subject()和claims()取法不一样），别问我怎么知道的😔</p>
+</blockquote>
+<p>剩下logout方法（删除redis中的refresh token），以及Controller层的改动没啥可说的，正常写就是。</p>
+<h3 id="三、-小结"><a href="#三、-小结" class="headerlink" title="三、 小结"></a>三、 小结</h3><p>今天实现了<strong>两个</strong>接口：</p>
+<p><code>(POST) - /api/auth/refresh</code></p>
+<p><code>(POST) - /api/auth/logout</code></p>
+<p>到这里呢，关于这个双token拦截还有我自己的一点小疑惑，后端代码不主动调用refresh，因此没有在后端中体现<strong>何时刷新</strong>，据说这个是与前端约定的，所以自定义错误状态码啥的可能得安排了。等之后写了前端再回来把这部分拾起来。</p>
+<p>今天就是这些啦，今天下午去上了老登的编译原理课，没想都还是个挺活泼的老登，就是爱点名，换课也换不了😡。晚上还去听了网易游戏的校招选讲，果然这种场合就不适合我去，好累，今天弄这么晚还没啥特别有效的进展😫。明天开始还要肝软工导论的作业。。。</p>
+<p>得，事已至此，先睡觉罢，都十二点半多了。</p>
+<p>祈禱明天對你來說，也是美好的一天ヾ(≧▽≦*)o。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/09/15/dick-hair-project/">http://example.com/2026/09/15/dick-hair-project/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/09/29/dick-hair-project-2/" title="吊毛项目日记(二) - 流式播放模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">吊毛项目日记(二) - 流式播放模块</div></div><div class="info-2"><div class="info-item-1">OMG，软工导论的作业快给我作死了，结果还是没坚持下来每天写。但先不管那些了，整理下这一周多做了些什么吧，不然到时候又忘得一干二净了^^;) 9月18日 ~ 9月22日通过检查我磕癌的git提交记录，这几天似乎主要在跟作业斗争。然后就是（纯靠AI）做了个从THBwiki上爬原曲的工具。说实话这个工具到现在我自己都没厘清。目前是分四步：数据收集、本地缓存、上传Minio、数据库存储。然后那个流水线写的跟狗屎一样乱成一坨。等以后心血来潮把它抽出来做成独立工具的时候再去仔细研究整改吧。至少做拉数据的工作它已经完成了（大概完成了，现在没解析曲名，也没法把MD5文件哈希写到库里😓） 9月23日流式播放数据返回接口的基本实现 既然爬了数据，作为一个电台项目，下一步自然就是播放音乐了。 一、 集成Minio客户端这也是老同志了，只是新版本似乎带来了不少变化，当然写流式接口的时候我还没发觉😔 1. 引依赖，Springboot4得用新版依赖了1234567&lt;!-- MinIO Client --&gt;&lt;dependency&gt;    &lt;groupId&gt;io.mi...</div></div></div></a><a class="pagination-related" href="/2026/02/28/hello-world/" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Hello World</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;  More info: Writing Run server1$ hexo server  More info: Server Generate static files1$ hexo generate  More info: Generating Deploy to remote sites1$ hexo deploy  More info: Deployment </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">John Doe</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E6%9C%8815%E6%97%A5"><span class="toc-number">1.</span> <span class="toc-text">9月15日</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E6%9C%8816%E6%97%A5"><span class="toc-number">2.</span> <span class="toc-text">9月16日</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81-JAVA%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93-MybatisPlus%E7%9A%84%E5%BC%95%E5%85%A5"><span class="toc-number">2.1.</span> <span class="toc-text">一、 JAVA操作数据库-MybatisPlus的引入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BC%95%E4%BE%9D%E8%B5%96%EF%BC%8CSpringboot4%E5%BE%97%E7%94%A8%E6%96%B0%E7%89%88%E4%BE%9D%E8%B5%96%E4%BA%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. 引依赖，Springboot4得用新版依赖了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-application-yml-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.2.</span> <span class="toc-text">2. application.yml 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8%E7%B1%BB-MapperScan%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.1.3.</span> <span class="toc-text">3. 启动类@MapperScan注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.4.</span> <span class="toc-text">4. 自动填充处理器的配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E7%BC%96%E5%86%99%E6%97%B6%E5%8F%88%E6%9C%89%E8%BF%99%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.5.</span> <span class="toc-text">5. 三层架构编写时又有这些小问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-ThreadLocal%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%88%9D%E6%AD%A5%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">二、 ThreadLocal上下文和全局异常处理器的初步实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ThreadLocal%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. ThreadLocal上下文的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%9E%81%E7%AE%80%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 全局异常处理器的极简实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E5%8D%95%E5%B1%82token%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.3.</span> <span class="toc-text">三、 单层token登录校验的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BE%9D%E8%B5%96%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. 依赖与配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-JwtUtil%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%8A%9F%E8%83%BD"><span class="toc-number">2.3.2.</span> <span class="toc-text">2. JwtUtil的实现与功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.3.3.</span> <span class="toc-text">3. 登录校验拦截器的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-WebMvcConfig%E9%85%8D%E7%BD%AE%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.3.4.</span> <span class="toc-text">4. WebMvcConfig配置类的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E7%BC%96%E7%A0%81%E9%AA%8C%E8%AF%81%E6%97%B6%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.5.</span> <span class="toc-text">5. 三层架构编码验证时的问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81-%E5%B0%8F%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">四、 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E6%9C%8817%E6%97%A5"><span class="toc-number">3.</span> <span class="toc-text">9月17日</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81-Redis%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">一、 Redis的引入及其相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BC%95%E4%BE%9D%E8%B5%96"><span class="toc-number">3.1.1.</span> <span class="toc-text">1. 引依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-application-yml-%E9%85%8D%E7%BD%AE-1"><span class="toc-number">3.1.2.</span> <span class="toc-text">2. application.yml 配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-%E5%8F%8Ctoken%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">二、 双token拦截机制的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-JwtUtil%EF%BC%8C%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%8CWebMvcConfig%E7%9A%84%E6%94%B9%E5%8A%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. JwtUtil，拦截器，WebMvcConfig的改动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E6%96%B9%E6%B3%95%E7%9A%84%E6%94%B9%E5%8A%A8"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. 三层架构方法的改动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">三、 小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/10/dick-hair-project-5/" title="吊毛项目日记(五) - 播放热榜 &amp; 热点缓存">吊毛项目日记(五) - 播放热榜 &amp; 热点缓存</a><time datetime="2026-10-10T12:19:56.394Z" title="Created 2026-10-10 20:19:56">2026-10-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/03/dick-hair-project-4/" title="吊毛项目日记(四) - 分片文件上传">吊毛项目日记(四) - 分片文件上传</a><time datetime="2026-10-03T13:05:16.505Z" title="Created 2026-10-03 21:05:16">2026-10-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/01/dick-hair-project-3/" title="吊毛项目日记(三) - 播放事件埋点">吊毛项目日记(三) - 播放事件埋点</a><time datetime="2026-10-01T12:06:39.990Z" title="Created 2026-10-01 20:06:39">2026-10-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/29/dick-hair-project-2/" title="吊毛项目日记(二) - 流式播放模块">吊毛项目日记(二) - 流式播放模块</a><time datetime="2026-09-29T11:23:06.720Z" title="Created 2026-09-29 19:23:06">2026-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/15/dick-hair-project/" title="吊毛项目日记 - 初始化与登录系统">吊毛项目日记 - 初始化与登录系统</a><time datetime="2026-09-15T09:54:15.317Z" title="Created 2026-09-15 17:54:15">2026-09-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By John Doe</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

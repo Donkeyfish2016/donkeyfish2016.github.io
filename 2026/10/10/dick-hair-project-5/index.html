@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>吊毛项目日记(五) - 播放热榜 &amp; 热点缓存 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="OMG，“日记”进度已经落后十天了，孩子们这并不好笑🥲。经过我的一番思考，我觉得果然还是先记录（学习）后端部分的东西吧，至少先把这部分跟进了再说，不然的话，前端本身懂得就不多，还是等之后种草期整顿的时候再仔细研究吧。 10月1日说回这部分，那天主要是初步实现了热榜统计的功能。热榜嘛，就是那个按曲目播放量排名，然后会实时“咕噜咕噜”滚动的的那个（那算啥^^;）。 一、 从技术选型说起1. 为嘛传统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吊毛项目日记(五) - 播放热榜 &amp; 热点缓存">
+<meta property="og:url" content="http://example.com/2026/10/10/dick-hair-project-5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="OMG，“日记”进度已经落后十天了，孩子们这并不好笑🥲。经过我的一番思考，我觉得果然还是先记录（学习）后端部分的东西吧，至少先把这部分跟进了再说，不然的话，前端本身懂得就不多，还是等之后种草期整顿的时候再仔细研究吧。 10月1日说回这部分，那天主要是初步实现了热榜统计的功能。热榜嘛，就是那个按曲目播放量排名，然后会实时“咕噜咕噜”滚动的的那个（那算啥^^;）。 一、 从技术选型说起1. 为嘛传统">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2026-10-10T12:19:56.394Z">
+<meta property="article:modified_time" content="2026-10-10T13:54:40.347Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "吊毛项目日记(五) - 播放热榜 & 热点缓存",
+  "url": "http://example.com/2026/10/10/dick-hair-project-5/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2026-10-10T12:19:56.394Z",
+  "dateModified": "2026-10-10T13:54:40.347Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "John Doe",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/10/10/dick-hair-project-5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '吊毛项目日记(五) - 播放热榜 & 热点缓存',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">吊毛项目日记(五) - 播放热榜 &amp; 热点缓存</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">吊毛项目日记(五) - 播放热榜 &amp; 热点缓存</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-10-10T12:19:56.394Z" title="Created 2026-10-10 20:19:56">2026-10-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-10-10T13:54:40.347Z" title="Updated 2026-10-10 21:54:40">2026-10-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>OMG，“日记”进度已经落后十天了，孩子们这并不好笑🥲。经过我的一番思考，我觉得果然还是先记录（学习）后端部分的东西吧，至少先把这部分跟进了再说，不然的话，前端本身懂得就不多，还是等之后种草期整顿的时候再仔细研究吧。</p>
+<h2 id="10月1日"><a href="#10月1日" class="headerlink" title="10月1日"></a>10月1日</h2><p>说回这部分，那天主要是初步实现了热榜统计的功能。热榜嘛，就是那个按曲目播放量排名，然后会实时“咕噜咕噜”滚动的的那个（那算啥^^;）。</p>
+<h3 id="一、-从技术选型说起"><a href="#一、-从技术选型说起" class="headerlink" title="一、 从技术选型说起"></a>一、 从技术选型说起</h3><h4 id="1-为嘛传统的-CRUD-不行？"><a href="#1-为嘛传统的-CRUD-不行？" class="headerlink" title="1. 为嘛传统的 CRUD 不行？"></a>1. 为嘛传统的 CRUD 不行？</h4><p>简单思考，这不就是 SQL 的 <strong>分组聚合COUNT + ORDER BY + 分页</strong> 语句吗？因为在第三话中，我们已经进行了播放事件埋点，这意味着我们有播放事件的数据记录。那直接查 PLAY 类型的事件，然后按曲目 ID 分组，统计播放量，最后按播放量排序，再分页，介不就完了么？如果只是要数据，那这么做确实可行，而且很好，因为不麻烦。但是作为<strong>实时</strong>热榜，就像上面说的，它会“咕噜咕噜”滚，如果我们只是查数据然后暴露 REST 接口的话…<strong>首先</strong>它不会自己刷新，所以看的人要手动 F5 才能获取最新数据；<strong>其次</strong>每次都要查数据库，那么多播放事件条目在，那不炸了。所以为了解决这些问题，我们需要考虑其他的路子。</p>
+<h4 id="2-解决方案规划"><a href="#2-解决方案规划" class="headerlink" title="2. 解决方案规划"></a>2. 解决方案规划</h4><p>既然不可能每次都去数据库重新统计，那么自然会想到使用我们已有的缓存中间件 Redis 来存储热榜数据，于是问题就变成了：存什么？用什么存？怎么存？</p>
+<p>存什么？自然是每首曲目的播放次数咯；那么用什么存呢？先想想热榜对于数据有什么要求：首先，一首歌对应一条数据，<strong>不能重</strong>；其次，虽然读出来排序也可以，但若是能在内存的<strong>有序</strong>集合中排好那自然再欢迎不过了。同时满足这俩条件的，果然就是 <strong>ZSet</strong> 了吧：自带 score 排序，不怕重复，甚至还有 ZINCRBY 累加和 ZREVRANGE 取 Top N。</p>
+<p>既然选择了 Zset 数据结构，怎么存呢？最朴素的想法当然是维护一个 ZSet，然后把所有播放都 ZINCRBY 进去，但问题在于，这是个<strong>实时</strong>热榜哦，总不能让老资历永远挂在顶上罢。哼嗯，或许我们会想到，既然实时，那每小时清一次不就行啦🤓，但这样的话刚清完那会儿热榜会变得空空如也…于是，我们有<strong>分钟桶 + 滑动窗口</strong>的策略：为每分钟维护一个 Zset，其中存放 trackId -&gt; playCount，查询时使用 ZUNIONSTORE 聚合最近60分钟的曲目播放次数，然后 ZREVRANGE 取前几名即可。</p>
+<p>存储数据的问题解决了，接下来的问题就是如何让它自己刷新了。比较直观的方法，既然我们可以暴露 REST 接口，那由前端定期发起请求不就行了（<strong>短轮询</strong>策略）？但是这样前端需要持续发起请求。那我们就尽量减少请求次数，使用长连接请求数据，直到有新数据可用或超时呗（<strong>长轮询</strong>策略）？这样…服务器还是要维护好多好多的挂起连接哇。或许我们会想到 <strong>WebSocket</strong> ，但它是全双工的，我们的场景只需要后端单向发消息给前端…于是，会考虑使用 <strong>SSE</strong> 来应对这个场景（这家伙最近火爆了哇，说到AI流式对话就是 SSE ^^;），其单向通信的性质完美匹配该场景，甚至它内置实现了自动重连（保活），Spring MVC 中也有 SseEmitter 支持，浏览器也大多有原生支持…中👍</p>
+<p>虽然 SSE 很中，但有个小问题果然还是要指出来，浏览器原生 EventSource 没法鉴权，因为它不走我们的 axios 拦截器。若是需要鉴权的话，前端就会稍微麻烦一点。但这里无所谓，直接放白名单😈。且听说在部署阶段，这块可能也会有些坑，但那些到时候再说吧，车到山前必有路，人到坟前自然死😌。</p>
+<p>于是通过以上的策略讨论，应用这些技术，我们就终于（理论上）得到了一个<strong>分钟级的实时热榜</strong>，每分钟都会“咕噜咕噜”的那种！</p>
+<h3 id="二、-Redis-ZSet-热榜数据存储"><a href="#二、-Redis-ZSet-热榜数据存储" class="headerlink" title="二、 Redis ZSet 热榜数据存储"></a>二、 Redis ZSet 热榜数据存储</h3><p>理论可行，实践开始😋。</p>
+<h4 id="1-redis-key-设计简述-与-埋点"><a href="#1-redis-key-设计简述-与-埋点" class="headerlink" title="1. redis key 设计简述 与 埋点"></a>1. redis key 设计简述 与 埋点</h4><p>先简单说一嘴 key 设计，既然是按分钟分桶，那么时间戳就具有天然唯一性，所以我们的 key 可以很顺溜地设计成 xxx:{yyyyMMddHHmm}。对于 Zset 数据结构，value 就是 xxx:trackId，score 就是其当前分钟播放次数。然后捏，这些数据肯定不能无期限地存在 redis 里，毕竟那可是宝贵的内存，不像 Constant.java 一样可以当字段垃圾桶用（Constant.java：你礼貌吗），所以我们需要给它一个合适的 TTL，这里我设为 90 分钟（60 分钟窗口 + 30 分钟余量）。</p>
+<p>然后是埋点。前面我们提到的 ZINCRBY 自然是应当在曲目播放时调用的，所以最简单的策略就是直接跑到 TrackController 里，给票据那个接口加一句调用，但这么写太吊毛了显然不行。在第二话中，我们已经在一次性票据生成接口中埋了播放事件生产者，所以这边也直接走消息队列异步处理就是了。于是，我们的做法就是在播放事件消费者中加一句：它现在不止处理 MySQL 落库，还要处理这部分的 ZINCRBY。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Constant.EVENT_TYPE_PLAY.equals(msg.getEventType())) &#123;</span><br><span class="line">    hotRankService.incrementPlayCount(msg.getTrackId(), msg.getEventTime());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/10/10/dick-hair-project-5/">http://example.com/2026/10/10/dick-hair-project-5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/10/03/dick-hair-project-4/" title="吊毛项目日记(四) - 分片文件上传"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">吊毛项目日记(四) - 分片文件上传</div></div><div class="info-2"><div class="info-item-1">OMG，说起来有个很搞笑的事，这部分我跟着AI爷迷迷糊糊地混完之后，才开始思考：Minio SDK 底层明明实现了自动分片功能（那套 S3 Multipart Upload 机制），为啥我还要自己手写一套？真是因果倒置我测^^;) 9月29日 ~ 9月30日果然还是先从这个文件上传模块究竟是在做什么开始罢。 一、 WHAT AM I FUCKING DOING?文件上传？后端实现个上传接口，然后前端用 Element-plus 提供的现成组件联调一下不应该就完事了嘛？Minio 第二话都配置好了耶。确实，这样很好，甚至对于大文件，Minio SDK 调用的 Minio 服务端也提供了自动分片的功能…但是，还有些问题是仅仅这样所满足不了的😢。 1. 数据存储端可拓展性最开始在跟着黑马做那个智能学习辅助系统的时候，我就没搞 阿里云OSS，而是在自己机子上搞了个 Minio 服务端。所以现在这个项目也是理所应当的用了 Minio 作为曲目存储的数据库。但是，万一哪天我脑疾发作，突然想搞事换到 阿里云OSS 呢？那不完犊子了，整个这个模块都要重新写。就像软工导作业，要求用Json文件存...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">John Doe</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E6%9C%881%E6%97%A5"><span class="toc-number">1.</span> <span class="toc-text">10月1日</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E4%BB%8E%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E8%AF%B4%E8%B5%B7"><span class="toc-number">1.1.</span> <span class="toc-text">一、 从技术选型说起</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%BA%E5%98%9B%E4%BC%A0%E7%BB%9F%E7%9A%84-CRUD-%E4%B8%8D%E8%A1%8C%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. 为嘛传统的 CRUD 不行？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E8%A7%84%E5%88%92"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. 解决方案规划</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-Redis-ZSet-%E7%83%AD%E6%A6%9C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">1.2.</span> <span class="toc-text">二、 Redis ZSet 热榜数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-redis-key-%E8%AE%BE%E8%AE%A1%E7%AE%80%E8%BF%B0-%E4%B8%8E-%E5%9F%8B%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. redis key 设计简述 与 埋点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/10/dick-hair-project-5/" title="吊毛项目日记(五) - 播放热榜 &amp; 热点缓存">吊毛项目日记(五) - 播放热榜 &amp; 热点缓存</a><time datetime="2026-10-10T12:19:56.394Z" title="Created 2026-10-10 20:19:56">2026-10-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/03/dick-hair-project-4/" title="吊毛项目日记(四) - 分片文件上传">吊毛项目日记(四) - 分片文件上传</a><time datetime="2026-10-03T13:05:16.505Z" title="Created 2026-10-03 21:05:16">2026-10-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/01/dick-hair-project-3/" title="吊毛项目日记(三) - 播放事件埋点">吊毛项目日记(三) - 播放事件埋点</a><time datetime="2026-10-01T12:06:39.990Z" title="Created 2026-10-01 20:06:39">2026-10-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/29/dick-hair-project-2/" title="吊毛项目日记(二) - 流式播放模块">吊毛项目日记(二) - 流式播放模块</a><time datetime="2026-09-29T11:23:06.720Z" title="Created 2026-09-29 19:23:06">2026-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/15/dick-hair-project/" title="吊毛项目日记 - 初始化与登录系统">吊毛项目日记 - 初始化与登录系统</a><time datetime="2026-09-15T09:54:15.317Z" title="Created 2026-09-15 17:54:15">2026-09-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By John Doe</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

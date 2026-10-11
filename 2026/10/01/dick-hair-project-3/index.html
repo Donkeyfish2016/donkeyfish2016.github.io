@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>吊毛项目日记(三) - 播放事件埋点 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="OMG，开始想记录这部分的时候，我才发现我好像对 Kafka 一窍不通😓。它到底是个啥、底层什么机制、为啥生产消费这么用…OH MY GOSH，全然知らない！😢之后慢慢补（那大概就是不会补了…）这些罢，先把它用起来再说^^;) 9月27日通过检查我磕癌的git提交记录，遥远的那天（遥远个蛋蛋，才过了三天），我似乎在努力把 Kafka 在我亲爱的 Win11 上跑通，并集成到我的项目中。为啥不用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吊毛项目日记(三) - 播放事件埋点">
+<meta property="og:url" content="http://example.com/2026/10/01/dick-hair-project-3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="OMG，开始想记录这部分的时候，我才发现我好像对 Kafka 一窍不通😓。它到底是个啥、底层什么机制、为啥生产消费这么用…OH MY GOSH，全然知らない！😢之后慢慢补（那大概就是不会补了…）这些罢，先把它用起来再说^^;) 9月27日通过检查我磕癌的git提交记录，遥远的那天（遥远个蛋蛋，才过了三天），我似乎在努力把 Kafka 在我亲爱的 Win11 上跑通，并集成到我的项目中。为啥不用">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2026-10-01T12:06:39.990Z">
+<meta property="article:modified_time" content="2026-10-08T11:57:41.524Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "吊毛项目日记(三) - 播放事件埋点",
+  "url": "http://example.com/2026/10/01/dick-hair-project-3/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2026-10-01T12:06:39.990Z",
+  "dateModified": "2026-10-08T11:57:41.524Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "John Doe",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/10/01/dick-hair-project-3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '吊毛项目日记(三) - 播放事件埋点',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">吊毛项目日记(三) - 播放事件埋点</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">吊毛项目日记(三) - 播放事件埋点</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-10-01T12:06:39.990Z" title="Created 2026-10-01 20:06:39">2026-10-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-10-08T11:57:41.524Z" title="Updated 2026-10-08 19:57:41">2026-10-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>OMG，开始想记录这部分的时候，我才发现我好像对 Kafka 一窍不通😓。它到底是个啥、底层什么机制、为啥生产消费这么用…OH MY GOSH，全然知らない！😢之后慢慢补（那大概就是不会补了…）这些罢，先把它用起来再说^^;)</p>
+<h2 id="9月27日"><a href="#9月27日" class="headerlink" title="9月27日"></a>9月27日</h2><p>通过检查我磕癌的git提交记录，遥远的那天（遥远个蛋蛋，才过了三天），我似乎在努力把 Kafka 在我亲爱的 Win11 上跑通，并集成到我的项目中。为啥不用 Docker？啊啊，每次开电脑都要跑 Docker 多累啊（虽然事到如今已经没办法不用它了，我不想再在本地折腾 Redis-stack 了😭），总之先说说怎么把它跑起来罢。</p>
+<h3 id="一、-安装与配置"><a href="#一、-安装与配置" class="headerlink" title="一、 安装与配置"></a>一、 安装与配置</h3><p>首先声明，后端项目是 Spring4.1.1 版本，支持的 Kafka 版本可以参见这里：<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/io/InputStreamResource.html">Spring for Apache Kafka</a>。然而因为没仔细查，问AI爷也说不清楚，我下的最新的4.3.1。虽然目前没用出啥问题就是了，A Blessing In Disguise ^^;)</p>
+<h4 id="1-在-Win11-上的安装"><a href="#1-在-Win11-上的安装" class="headerlink" title="1. 在 Win11 上的安装"></a>1. 在 Win11 上的安装</h4><p>关于 Windows 上的安装教程，可以参考博客<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40853117/article/details/147016800">windows启动kafka4.0</a> 和 <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_75069300/article/details/164216395">Windows 安装 Kafka 4.3.1 完整教程</a>。它们应该能解决绝大多数问题。网上搜出来的教程相当一部分都是老版本的，基本看到里面有配置 ZooKeeper 的就说明它是老版本，关于老版本的教程，可以参考博客<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ycfenxi/p/19200689">详细介绍：Windows安装Apache Kafka保姆级教程</a>，配置类相关给的很详细。</p>
+<p>配置、日志初始化啥的搞完之后，有几个需要注意的点：</p>
+<p><strong>首先</strong>，Win11 在 8 月份已经彻底移除了 wmic 的支持，所以现在可选功能里也下不到它了，但 Kafka 现在的脚本里还使用它来计算 JVM 堆大小。绕过的方法在上面大佬的博客中也有，启动时：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$env:KAFKA_HEAP_OPTS</span>=<span class="string">&quot;-Xmx1G -Xms1G&quot;</span></span><br><span class="line">.\bin\windows\kafka<span class="literal">-server-start</span>.bat .\config\server.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>其次</strong>，<strong>The syntax of the command is incorrect.</strong> 这一般是 Kafka 的安装目录名字太长了（神秘错误），把目录搞浅一点就行。来看看大肥鱼的解释：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-storage.bat 内部会调用 kafka-run-class.bat 构建一个很长的 CLASSPATH 环境变量。如果你的 Kafka 安装路径很深（例如 D:\kafka_2.13-4.3.1\kafka_2.13-4.3.1\...），拼接后的命令长度很容易超出 Windows 命令行限制（约 8191 字符），从而触发此错误。</span><br></pre></td></tr></table></figure>
+
+<p><strong>最后</strong>，是一个很神奇的问题，似乎和 Windows 文件系统有关：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR There was an error in one of the threads during logs loading: org.apache.kafka.common.errors.KafkaStorageException: The log dir D:\kafka4.3.1\kafka-logs is already offline due to a previous IO exception. (kafka.log.LogManager)</span><br><span class="line">[2026-09-27 16:22:23,158] ERROR Encountered fatal fault: Error starting LogManager (org.apache.kafka.server.fault.ProcessTerminatingFaultHandler)</span><br><span class="line">org.apache.kafka.common.errors.KafkaStorageException: The log dir D:\kafka4.3.1\kafka-logs is already offline due to a previous IO exception.\</span><br></pre></td></tr></table></figure>
+<p>当时遇到这个突然启动不了，然后把日志目录下的文件都删了（但是最开始自己生成的那几个别删，但<code> __cluster_metadata-0\00000000000000000000-0000000000.checkpoint.deleted</code> 必须删），就突然又好了。嗯，早知道用蓝色大鲸鱼了。</p>
+<h4 id="2-集成到-Spring-4-1-1-项目"><a href="#2-集成到-Spring-4-1-1-项目" class="headerlink" title="2. 集成到 Spring 4.1.1 项目"></a>2. 集成到 Spring 4.1.1 项目</h4><p>既然官方支持了，直接引依赖就行了。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- kafka --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-kafka<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>关于这个 yaml 配置，那确实是很有故事了，特别是这个（反）序列化。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">kafka:</span></span><br><span class="line">    <span class="attr">bootstrap-servers:</span> <span class="string">localhost:9092</span></span><br><span class="line">    <span class="comment"># ── 生产者配置 ──</span></span><br><span class="line">    <span class="attr">producer:</span></span><br><span class="line">      <span class="attr">key-serializer:</span> <span class="string">org.apache.kafka.common.serialization.StringSerializer</span></span><br><span class="line">      <span class="attr">value-serializer:</span> <span class="string">org.springframework.kafka.support.serializer.JacksonJsonSerializer</span></span><br><span class="line">      <span class="comment"># value-serializer: org.apache.kafka.common.serialization.StringSerializer</span></span><br><span class="line">      <span class="attr">acks:</span> <span class="number">1</span>                       <span class="comment"># 异步埋点不要求强一致</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">3</span>                    <span class="comment"># 发送失败重试 3 次</span></span><br><span class="line">      <span class="attr">batch-size:</span> <span class="number">16384</span>             <span class="comment"># 16KB 批量发送缓冲区</span></span><br><span class="line">      <span class="attr">properties:</span></span><br><span class="line">        <span class="attr">linger.ms:</span> <span class="number">10</span>               <span class="comment"># 等待 10ms 攒批，减少网络请求次数</span></span><br><span class="line">    <span class="comment"># ── 消费者配置 ──</span></span><br><span class="line">    <span class="attr">consumer:</span></span><br><span class="line">      <span class="attr">group-id:</span> <span class="string">play-event-consumer-group</span></span><br><span class="line">      <span class="attr">key-deserializer:</span> <span class="string">org.apache.kafka.common.serialization.StringDeserializer</span></span><br><span class="line">      <span class="attr">value-deserializer:</span> <span class="string">org.springframework.kafka.support.serializer.JacksonJsonDeserializer</span></span><br><span class="line">      <span class="comment"># value-deserializer: org.apache.kafka.common.serialization.StringDeserializer</span></span><br><span class="line">      <span class="attr">auto-offset-reset:</span> <span class="string">earliest</span>   <span class="comment"># 新消费者组从头消费</span></span><br><span class="line">      <span class="attr">enable-auto-commit:</span> <span class="literal">true</span>      <span class="comment"># 自动提交 offset</span></span><br><span class="line">      <span class="attr">max-poll-records:</span> <span class="number">500</span>         <span class="comment"># 单次拉取上限，攒够批量入库</span></span><br><span class="line">      <span class="attr">properties:</span></span><br><span class="line">        <span class="attr">spring.json.trusted.packages:</span> <span class="string">&quot;com.gensoradio.demo.module.event.pojo&quot;</span></span><br></pre></td></tr></table></figure>
+<p>最后记得喊AI爷写个简单的单元测试看看基本功能（生产者发消息到 Kafka 主题，消费者从 Kafka 主题消费消息）是不是正常工作。</p>
+<p><strong>总结下好像也就一句话：早知道一开始就用 Docker 了😓</strong></p>
+<h2 id="9月28日"><a href="#9月28日" class="headerlink" title="9月28日"></a>9月28日</h2><p><strong>Kafka 事件埋点与异步入库的基本实现</strong>。</p>
+<h3 id="一、-基础设施与架构"><a href="#一、-基础设施与架构" class="headerlink" title="一、 基础设施与架构"></a>一、 基础设施与架构</h3><p>作为播放事件埋点模块，显然这个“事件”的 pojo 是必要的，也很自然地会想到需要去设计一个播放事件表，不然埋什么点呢。这些内容的设计中，需要留个心眼的，我觉得就是类型为 LocalDateTime 的那几个字段了，它们的序列化问题着实有些特殊🥲。哦对了，后来我还给实体&#x2F;表加了幂等写入键，防止重复写相同数据。</p>
+<p>对于三层架构，Mapper 自然不用说，都用 MyBatis-Plus 了。服务层的话…目前似乎也就需要一个 save 事件的方法。单纯对这个模块来说，它不需要暴露什么请求接口，因为“埋点”嘛，只需要在曲目播放事件发生时（TrackController中）触发就行。</p>
+<p>最后是我认为本模块的核心，既然是消息队列，那么 Producer-Consumer 自然是不可或缺的。一开始AI✌给出的方案里，直接把生产者（埋事件）的那部分逻辑嵌到 TrackController 里了，我觉得这真不太行吧，万一还有别的地方埋事件呢对吧？</p>
+<h3 id="二、-生产者-消费者的实现"><a href="#二、-生产者-消费者的实现" class="headerlink" title="二、 生产者-消费者的实现"></a>二、 生产者-消费者的实现</h3><p>这部分…我觉得果然还需要再仔细学习 Kafka，或者说消息队列才行呐😓</p>
+<h4 id="1-生产者"><a href="#1-生产者" class="headerlink" title="1. 生产者"></a>1. 生产者</h4><p>来梳理下生产者需要完成什么任务：</p>
+<p>(1) 既然要上报事件，那肯定首先需要构造事件的 DTO。构造过程中我认为需要注意的字段如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 幂等写入键 eventId</span></span><br><span class="line"><span class="type">String</span> <span class="variable">eventId</span> <span class="operator">=</span> UUID.randomUUID().toString();</span><br><span class="line"><span class="comment">// 从传入的 HttpServletRequest 中获取用户 IP 与 User-Agent</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sourceIp</span> <span class="operator">=</span> request.getRemoteAddr();</span><br><span class="line"><span class="type">String</span> <span class="variable">userAgent</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;User-Agent&quot;</span>);</span><br><span class="line"><span class="comment">// 从 ThreadLocal 获取用户 ID</span></span><br><span class="line"><span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> UserContext.getUserId();</span><br></pre></td></tr></table></figure>
+
+<p>(2) 有了消息体，接下来就是上报事件给 Kafka 呢。这里就需要使用 KafkaTemplate&lt;K, V&gt; 的 send 方法来进行发送。此方法的具体说明参见 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-kafka/docs/3.1.0-RC1/reference/kafka/sending-messages.html#kafka-template">Sending Messages</a>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CompletableFuture&lt;SendResult&lt;K, V&gt;&gt; send(String topic, K key, V data);</span></span><br><span class="line">CompletableFuture&lt;SendResult&lt;String, PlayEventDTO&gt;&gt; future = kafkaTemplate.send(</span><br><span class="line">  Constant.KAFKA_TOPIC_PLAY_EVENTS, trackId.toString(), message</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>该方法将指定数据发送到指定的 Kafka Topic，并带有明确的 Key。且该方法是异步非阻塞的，调用 send 方法后立即返回一个 CompletableFuture，不会阻塞调用线程。发送操作在后台进行。毕竟是 Future 系的返回值，<strong>未来会被使用</strong>嘛🤓</p>
+<p>(3) 既然发送方法有返回的 CompletableFuture，我们就可以给它注册个回调来处理发送结果。它终究只是个事件上报，不能让它影响正常的业务功能呢。所以失败的话就在日志里吱个声就是啦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">future.whenComplete((result, ex) -&gt; &#123;...&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最后的话，我给这个 report 方法提供了两种重载：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 完整上报（PAUSE/SKIP/COMPLETE 事件用，携带播放位置和时长）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">report</span><span class="params">(Long trackId, String eventType, Long playPosition, Integer playDuration, HttpServletRequest request)</span> &#123;...&#125;</span><br><span class="line"><span class="comment">// 简单上报（PLAY 事件用）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">report</span><span class="params">(Long trackId, String eventType, HttpServletRequest request)</span> &#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>当然现在偷懒，所有事件都是 PLAY 事件嘻嘻(●’◡’●)，也就是播放位置和时长都是0。</p>
+<h4 id="2-消费者"><a href="#2-消费者" class="headerlink" title="2. 消费者"></a>2. 消费者</h4><p>接下来来看看消费者，当前阶段，消费事件也就等价于通过服务让事件落库。</p>
+<p>这块写代码其实并不复杂，难的在于理解学习 Kafka 消费者的基本原理。当然我现在还没学懂，先把代码跑起来，原理啥的之后再说罢^^;)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@KafkaListener(</span></span><br><span class="line"><span class="meta">  topics = Constant.KAFKA_TOPIC_PLAY_EVENTS,</span></span><br><span class="line"><span class="meta">  groupId = Constant.PLAY_EVENT_CONSUMER_GROUP</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(ConsumerRecord&lt;String, PlayEventDTO&gt; record)</span> &#123;</span><br><span class="line">  <span class="type">PlayEventDTO</span> <span class="variable">msg</span> <span class="operator">=</span> record.value();</span><br><span class="line">  playEventService.save(msg);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本就是这么点东西。**@KafkaListener** 会指示 Spring 容器为被标注的方法创建一个消息监听器容器（Message Listener Container）。当有消息到达指定的 Topic 时，容器就会调用此方法来处理消息。而 <strong>ConsumerRecord&lt;K, V&gt;</strong> 是 Kafka 消息记录，包含 key &#x2F; value &#x2F; offset 等元信息。</p>
+<h3 id="三、-服务层与控制层的集成"><a href="#三、-服务层与控制层的集成" class="headerlink" title="三、 服务层与控制层的集成"></a>三、 服务层与控制层的集成</h3><p>关于服务层，现在也就是把事件写入数据库的 save 方法，唯一需要注意的就是因为加了幂等键 eventId，不要忘了把 insert 用 try-catch 包起来就行。</p>
+<p>至于控制层，我们需要在那里<del>播种</del>埋点。因为按照第二话的架构，播放曲目前都是要走一次性票据生成的，所以我们在那里埋就行了。生完票让生产者上报一下 PLAY 事件就行。之后还要在其他哪埋点…那再说吧。</p>
+<h3 id="四、-序列化？反序列化？"><a href="#四、-序列化？反序列化？" class="headerlink" title="四、 序列化？反序列化？"></a>四、 序列化？反序列化？</h3><p>键序列化对象倒是没问题，毕竟它就是个字符串，但是，值侧就不一样了…</p>
+<p>最开始，生产者侧的值序列化对象是：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">value-serializer:</span> <span class="string">org.springframework.kafka.support.serializer.JsonSerializer</span></span><br></pre></td></tr></table></figure>
+<p>然后跑服务做测试的时候，出现了这样的报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.kafka.common.errors.SerializationException: Can&#x27;t serialize data </span><br><span class="line">[PlayEventDTO(...)] for topic [play-events]</span><br></pre></td></tr></table></figure>
+<p>无法序列化对象？查了资料发现，是“在无参构造时会创建一个纯净的 Jackson ObjectMapper，这个 ObjectMapper 不包含 JavaTimeModule，因此遇到 LocalDateTime 类型时无法序列化，抛出异常”。</p>
+<p>嘶，那怎么办？最开始想到的是既然它默认是新建一个纯净的 Jackson ObjectMapper，那我通过个配置类重新注入一个带 JavaTimeModule 的 ObjectMapper？不用它默认的。把这个想法告诉AI✌，我滴妈，太鸡儿麻烦了，pass。</p>
+<p>然后么…那换成 <code>org.apache.kafka.common.serialization.StringSerializer</code>，然后两边都自己手动(反)序列化JSON字符串？咕，那也太烦了，杀了我吧。结果还是试着做了，结果呢…</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parameter 1 of constructor in com.gensoradio.demo.module.event.kafka.PlayEventProducer required a bean of type &#x27;com.fasterxml.jackson.databind.ObjectMapper&#x27; that could not be found.</span><br></pre></td></tr></table></figure>
+
+<p>What’s up，Bean 都搞没了喔。我在生产者和消费者中都引入了 <code>com.fasterxml.jackson.databind.ObjectMapper</code> 来手写JSON字符串解析逻辑，但是这不对。查了下发现，新版本 Springboot 中，自动配置的 ObjectMapper 已经不在 fasterxml 下了。</p>
+<p>那到底是怎么回事呢？我拿着完整的问题与现象去求助蓝色大肥鱼：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">情景：</span><br><span class="line">现有一个springboot4.1.1＋maven项目，现需要使用kafka用作消息队列，生产者消费者的序列/反序列均在yaml中配置为Json（de）Serializer，使用json对象（反）序列化。</span><br><span class="line">现在遇到这样的问题：</span><br><span class="line">被序列化对象是一个dto（myDto），其中含有localdatetime字段，但kafka通过配置默认生成的objectmapper（其中不含序列化localdatetime的模块）无法序列化该字段，从而出现报错，无法正常完成任务。</span><br><span class="line">暂定解决方案：</span><br><span class="line">希望通过增加配置类，让kafka使用自建的带localdatetime模块的objectmapper。</span><br><span class="line">请分析该方案是否可行？若可行，具体如何实施，给出详细落地步骤？若不行，说明原因。</span><br><span class="line">注：经查验资料，springboot4.x中，由spring自动配置的objectmapperbean对象类的父包已不在fasterxml下，而在tools下。</span><br></pre></td></tr></table></figure>
+
+<p>然后她给出了正确的解释，我真是爱死她了muamuamua（づ￣3￣）づ╭❤～</p>
+<p>以下是大肥鱼对这个问题的回答：</p>
+<h4 id="问题根源：Spring-Boot-4-中的“双-Jackson”现象"><a href="#问题根源：Spring-Boot-4-中的“双-Jackson”现象" class="headerlink" title="问题根源：Spring Boot 4 中的“双 Jackson”现象"></a>问题根源：Spring Boot 4 中的“双 Jackson”现象</h4><p>Spring Boot 4 默认使用 <strong>Jackson 3</strong>（包路径 <code>tools.jackson</code>），其 <code>JsonMapper</code> <strong>已经内置了对 <code>LocalDateTime</code> 的支持</strong>，无需额外模块。然而，Spring Kafka 4.1 同时提供了两套 JSON 序列化器：</p>
+<table>
+<thead>
+<tr>
+<th>序列化器类</th>
+<th>Jackson 版本</th>
+<th>对应 Mapper 类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>JsonSerializer</code> &#x2F; <code>JsonDeserializer</code></td>
+<td>Jackson 2</td>
+<td><code>com.fasterxml.jackson.databind.ObjectMapper</code></td>
+</tr>
+<tr>
+<td><code>JacksonJsonSerializer</code> &#x2F; <code>JacksonJsonDeserializer</code></td>
+<td>Jackson 3</td>
+<td><code>tools.jackson.databind.json.JsonMapper</code></td>
+</tr>
+</tbody></table>
+<p>你在 YAML 中配置的若是 **<code>JsonSerializer</code>**，实际使用的是 <strong>Jackson 2</strong> 的实现，它默认不会自动注册 <code>JavaTimeModule</code>，因此序列化 <code>LocalDateTime</code> 时会抛出 <code>InvalidDefinitionException</code>。</p>
+<p>最后全部换成如当前所示的 Jackson3 的序列器就好了。我说怎么这么诡异，给我 Bean 都莫名其妙的整没了，合着是版本更新，用的老兵(Bean)退环境了^^;)</p>
+<p>话说回来这个问题好像也不是我一个人遇到，此事在 <a target="_blank" rel="noopener" href="https://ankurm.com/spring-boot-4-1-kafka-producer-consumer-serialisation/">Spring Boot 4.1 and Apache Kafka: Producer, Consumer and Serialisation from Scratch</a> 中亦有记载。</p>
+<h3 id="五、-小结"><a href="#五、-小结" class="headerlink" title="五、 小结"></a>五、 小结</h3><p>至此播放事件埋点也就算是初步实现了，至于以后还有什么别的动作，那就是后话了。结果但从把代码跑起来，功能运行起来的角度上来说，没有被一窍不通的 Kafka 绊住很多，反而是被 Jackson 版本问题卡住了，令人忍俊不禁🥲</p>
+<p>说起来，昨晚薯片，今中午叉烧，晚上鱿鱼，现在感觉我脆弱的胃有点危险，疑似有点似了😓</p>
+<p>总之就这样吧，能跑就行^^;)</p>
+<p>那么，一如既往的，祈禱明天對你來說，也是美好的一天ヾ(≧▽≦*)o。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/10/01/dick-hair-project-3/">http://example.com/2026/10/01/dick-hair-project-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/10/03/dick-hair-project-4/" title="吊毛项目日记(四) - 分片文件上传"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">吊毛项目日记(四) - 分片文件上传</div></div><div class="info-2"><div class="info-item-1">OMG，说起来有个很搞笑的事，这部分我跟着AI爷迷迷糊糊地混完之后，才开始思考：Minio SDK 底层明明实现了自动分片功能（那套 S3 Multipart Upload 机制），为啥我还要自己手写一套？真是因果倒置我测^^;) 9月29日 ~ 9月30日果然还是先从这个文件上传模块究竟是在做什么开始罢。 一、 WHAT AM I FUCKING DOING?文件上传？后端实现个上传接口，然后前端用 Element-plus 提供的现成组件联调一下不应该就完事了嘛？Minio 第二话都配置好了耶。确实，这样很好，甚至对于大文件，Minio SDK 调用的 Minio 服务端也提供了自动分片的功能…但是，还有些问题是仅仅这样所满足不了的😢。 1. 数据存储端可拓展性最开始在跟着黑马做那个智能学习辅助系统的时候，我就没搞 阿里云OSS，而是在自己机子上搞了个 Minio 服务端。所以现在这个项目也是理所应当的用了 Minio 作为曲目存储的数据库。但是，万一哪天我脑疾发作，突然想搞事换到 阿里云OSS 呢？那不完犊子了，整个这个模块都要重新写。就像软工导作业，要求用Json文件存...</div></div></div></a><a class="pagination-related" href="/2026/09/29/dick-hair-project-2/" title="吊毛项目日记(二) - 流式播放模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">吊毛项目日记(二) - 流式播放模块</div></div><div class="info-2"><div class="info-item-1">OMG，软工导论的作业快给我作死了，结果还是没坚持下来每天写。但先不管那些了，整理下这一周多做了些什么吧，不然到时候又忘得一干二净了^^;) 9月18日 ~ 9月22日通过检查我磕癌的git提交记录，这几天似乎主要在跟作业斗争。然后就是（纯靠AI）做了个从THBwiki上爬原曲的工具。说实话这个工具到现在我自己都没厘清。目前是分四步：数据收集、本地缓存、上传Minio、数据库存储。然后那个流水线写的跟狗屎一样乱成一坨。等以后心血来潮把它抽出来做成独立工具的时候再去仔细研究整改吧。至少做拉数据的工作它已经完成了（大概完成了，现在没解析曲名，也没法把MD5文件哈希写到库里😓） 9月23日流式播放数据返回接口的基本实现 既然爬了数据，作为一个电台项目，下一步自然就是播放音乐了。 一、 集成Minio客户端这也是老同志了，只是新版本似乎带来了不少变化，当然写流式接口的时候我还没发觉😔 1. 引依赖，Springboot4得用新版依赖了1234567&lt;!-- MinIO Client --&gt;&lt;dependency&gt;    &lt;groupId&gt;io.mi...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">John Doe</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E6%9C%8827%E6%97%A5"><span class="toc-number">1.</span> <span class="toc-text">9月27日</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">一、 安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%9C%A8-Win11-%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. 在 Win11 上的安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%9B%86%E6%88%90%E5%88%B0-Spring-4-1-1-%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. 集成到 Spring 4.1.1 项目</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E6%9C%8828%E6%97%A5"><span class="toc-number">2.</span> <span class="toc-text">9月28日</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E4%B8%8E%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">一、 基础设施与架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">二、 生产者-消费者的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. 生产者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 消费者</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E6%9C%8D%E5%8A%A1%E5%B1%82%E4%B8%8E%E6%8E%A7%E5%88%B6%E5%B1%82%E7%9A%84%E9%9B%86%E6%88%90"><span class="toc-number">2.3.</span> <span class="toc-text">三、 服务层与控制层的集成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81-%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">四、 序列化？反序列化？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%A0%B9%E6%BA%90%EF%BC%9ASpring-Boot-4-%E4%B8%AD%E7%9A%84%E2%80%9C%E5%8F%8C-Jackson%E2%80%9D%E7%8E%B0%E8%B1%A1"><span class="toc-number">2.4.1.</span> <span class="toc-text">问题根源：Spring Boot 4 中的“双 Jackson”现象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81-%E5%B0%8F%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">五、 小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/10/dick-hair-project-5/" title="吊毛项目日记(五) - 播放热榜 &amp; 热点缓存">吊毛项目日记(五) - 播放热榜 &amp; 热点缓存</a><time datetime="2026-10-10T12:19:56.394Z" title="Created 2026-10-10 20:19:56">2026-10-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/03/dick-hair-project-4/" title="吊毛项目日记(四) - 分片文件上传">吊毛项目日记(四) - 分片文件上传</a><time datetime="2026-10-03T13:05:16.505Z" title="Created 2026-10-03 21:05:16">2026-10-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/01/dick-hair-project-3/" title="吊毛项目日记(三) - 播放事件埋点">吊毛项目日记(三) - 播放事件埋点</a><time datetime="2026-10-01T12:06:39.990Z" title="Created 2026-10-01 20:06:39">2026-10-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/29/dick-hair-project-2/" title="吊毛项目日记(二) - 流式播放模块">吊毛项目日记(二) - 流式播放模块</a><time datetime="2026-09-29T11:23:06.720Z" title="Created 2026-09-29 19:23:06">2026-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/15/dick-hair-project/" title="吊毛项目日记 - 初始化与登录系统">吊毛项目日记 - 初始化与登录系统</a><time datetime="2026-09-15T09:54:15.317Z" title="Created 2026-09-15 17:54:15">2026-09-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By John Doe</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
